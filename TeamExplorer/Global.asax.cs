@@ -33,6 +33,12 @@ namespace TeamExplorer
             );
 
             routes.MapRoute(
+                name: "WorkingCharter",
+                url: "charter/{id}",
+                defaults: new { controller = "Charter", action = "Index" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
@@ -53,7 +59,7 @@ namespace TeamExplorer
                             {
                                 ConnectionStringName = "RavenDB"
                             };
-            DocumentStore.Conventions.IdentityPartsSeparator = "-";
+            // DocumentStore.Conventions.IdentityPartsSeparator = "-";
             DocumentStore.Initialize();
 
         }

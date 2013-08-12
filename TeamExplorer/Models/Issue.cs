@@ -11,12 +11,13 @@ namespace TeamExplorer.Models
             Images = new Collection<string>();
         }
 
-        public string Id { get; set; }
-        public string CharterId { get; set; }
+        public int Id { get; set; }
+        public int CharterId { get; set; }
 
-        [Required]
+        // TODO: should fix required fields
+        //[Required]
         public IssueType IssueType { get; set; }
-        [Required]
+        //[Required]
         public string Description { get; set; }
         public string IssueDetails { get; set; }
         public string Url { get; set; }

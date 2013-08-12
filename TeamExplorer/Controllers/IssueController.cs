@@ -24,7 +24,7 @@ namespace TeamExplorer.Controllers
             return View(issue);
         }
 
-        public ActionResult Form(string charterId)
+        public ActionResult Form(int charterId)
         {
             return PartialView(new Issue { CharterId = charterId });
         }

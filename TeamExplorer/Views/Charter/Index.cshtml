@@ -1,24 +1,114 @@
 ﻿@model TeamExplorer.Controllers.CharterViewModel
 
-<h2>Create a new issue</h2>    
-@Html.Action("Form", "Issue", new { charterId = Model.Charter.Id })
+<h2>Create a new issue</h2>
+<div ng-app="charterApplication" ng-controller="issueController" ng-init="CharterId=1337">
 
-<h2>Reported issues</h2>
-<table>
-    <caption>Reported issues</caption>
-    <thead>
-        <tr>
-            <th>Description</th>
-            <th>Issue Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var issue in Model.Issues)
-        {
-        <tr>
-            <td>@Html.ActionLink(issue.Description ?? "[description]", "Show", "Issue", new { issue.Id }, null)</td>
-            <td>@issue.IssueType</td>
-        </tr>            
-        }
-    </tbody>
-</table>
+    <form>
+        <fieldset>
+            <legend>Create new issue</legend>
+            
+            <input type="hidden" ng-model="issue.CharterId" value="1337" />
+
+            <div class="form-group">
+                <label for="issueType">Issue Type</label>
+                <select id="issueType" name="issueType" ng-model="issue.IssueType" class="form-control">
+                    <option value="Bug">Bug</option>
+                    <option value="Issue">Issue</option>
+                    <option value="Note">Note</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" id="description" name="description" ng-model="issue.Description" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="description">Details</label>
+                <textarea type="text" id="details" name="details" ng-model="issue.Details" class="form-control"></textarea>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Developer information</legend>
+        </fieldset>
+
+        <fieldset>
+            <legend>Screenshots: {{CharterId}}</legend>
+            <div class="screenshots" ng-repeat="image in images">
+                <img ng-src="{{image}}" />
+            </div>
+        </fieldset>
+        <button ng-click="save()">Create!</button>
+    </form>
+
+    <h2>Reported issues</h2>
+    <table>
+        <caption>Reported issues</caption>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Issue Type</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="issue in issues">
+            <tr>
+                <td>{{issue.Description}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>
+
+
+
+<script src="/Scripts/angular.js"></script>
+<script src="/Scripts/angular-resource.js"></script>
+
+<script>
+    var cropsApp = angular.module('charterApplication', ["issueService"]);
+
+    var api = angular.module("issueService", ["ngResource"]);
+    api.factory("Issue", function($resource) {
+        return $resource(
+            "/api/issue/:Id",
+            { Id: "@@Id" },
+            { "update": { method: "PUT" } }
+        );
+    });
+
+    cropsApp.controller('issueController', function($scope, Issue) {
+        $scope.issues = Issue.query({ charterId: 1337 });
+        $scope.issue = new Issue();
+        $scope.images = [];
+
+        $scope.save = function () {
+            $scope.issue.CharterId = $scope.CharterId;
+            
+            console.log($scope.issue);
+            $scope.issue.$save();
+        };
+
+        var imageLoaded = function(src) {
+            console.log(src);
+            $scope.images.push(src);
+            $scope.$apply();
+        };
+
+        document.onpaste = function (event) {
+            var items = event.clipboardData.items;
+            console.log(JSON.stringify(items));
+
+            var blob = items[0].getAsFile();
+            var reader = new FileReader();
+            reader.onload = function (loaded) {
+                imageLoaded(loaded.target.result);
+            };
+
+            reader.readAsDataURL(blob);
+        };
+
+    });
+
+    // TeamExplorer.captureImages();
+    
+</script>

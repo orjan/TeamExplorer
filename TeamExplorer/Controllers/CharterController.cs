@@ -15,6 +15,7 @@ namespace TeamExplorer.Controllers
 
             charterViewModel.Charter = charter;
             charterViewModel.Issues = issues;
+
             return View(charterViewModel);
         }
 
