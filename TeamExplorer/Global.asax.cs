@@ -8,6 +8,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Embedded;
 
 namespace TeamExplorer
 {
@@ -46,20 +47,15 @@ namespace TeamExplorer
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            BundleTable.Bundles.RegisterTemplateBundles();
-            BundleTable.Bundles.EnableBootstrapBundle();
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            if (DocumentStore != null) return; // prevent misuse
-
-            DocumentStore = new DocumentStore
-            {
-                ConnectionStringName = "RavenDB"
-                
-
-            };
+            DocumentStore = new EmbeddableDocumentStore()
+                            {
+                                ConnectionStringName = "RavenDB"
+                            };
             DocumentStore.Conventions.IdentityPartsSeparator = "-";
             DocumentStore.Initialize();
-            
+
         }
 
         public static IDocumentStore DocumentStore;
