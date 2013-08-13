@@ -1,44 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Http;
-using Raven.Client;
 using Raven.Client.Linq;
 using TeamExplorer.Models;
 
 namespace TeamExplorer.Controllers.Api
 {
-    public class IssueController : ApiController
+    public class IssueController : DocumentApiController
     {
-        private IDocumentSession session;
-        public IssueController()
-        {
-            session = MvcApplication.DocumentStore.OpenSession();
-        }
-        /*
-        // GET api/issue
-        public IEnumerable<Issue> Get()
-        {
-            return new Issue[]{ new Issue() {Description = "apa"}};
-        }*/
-
         // GET api/issue
         public IEnumerable<Issue> Get(int charterId)
         {
-            using (session)
-            {
-                return session.Query<Issue>().Where(i => i.CharterId == charterId);
-            }
+            return DocumentSession.Query<Issue>().Where(i => i.CharterId == charterId);
         }
 
         // POST api/issue
         public Issue Post([FromBody]Issue issue)
         {
-            using (session)
-            {
-                session.Store(issue);
-                session.SaveChanges();
-                return issue;
-            }
+            DocumentSession.Store(issue);
+            return issue;
         }
 
         // PUT api/issue/5
@@ -50,5 +29,13 @@ namespace TeamExplorer.Controllers.Api
         public void Delete(int id)
         {
         }
+    }
+
+    public class IssueTypeController : DocumentApiController
+    {
+        public IEnumerable<IssueType> Get()
+        {
+            return DocumentSession.Query<IssueType>();
+        }        
     }
 }

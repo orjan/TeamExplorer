@@ -12,7 +12,7 @@ namespace TeamExplorer.Controllers
             return View(charters);
         }
 
-        public ActionResult Explore(string id)
+        public ActionResult Explore(int id)
         {
             var charter = DocumentSession.Load<Charter>(id);
             return View(charter);

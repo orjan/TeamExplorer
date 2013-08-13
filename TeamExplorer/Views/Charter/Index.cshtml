@@ -12,7 +12,7 @@
 
             <div class="form-group">
                 <label for="issueType">Issue Type</label>
-                <select id="issueType" name="issueType" ng-model="issue.IssueType" class="form-control">
+                <select id="issueType" name="issueType" ng-model="issue.IssueTypeId" class="form-control" ng-options="issueType.Id as issueType.Name for issueType in issueTypes">
                     <option value="Bug">Bug</option>
                     <option value="Issue">Issue</option>
                     <option value="Note">Note</option>
@@ -31,49 +31,57 @@
 
         <fieldset>
             <legend>Developer information</legend>
+            <div class="form-group">
+                <label for="url">URL to reproduce the issue</label>
+                <input type="url" id="url" name="url" ng-model="issue.Url" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="stacktrace">Stack trace</label>
+                <textarea id="stacktrace" name="stacktrace" ng-model="issue.StackTrace" class="form-control"></textarea>
+            </div>
+
         </fieldset>
 
         <fieldset>
-            <legend>Screenshots: {{CharterId}}</legend>
-            <div class="screenshots" ng-repeat="image in issue.Images">
-                <img ng-src="{{image}}" />
+            <legend>Screenshots</legend>
+
+            <div class="row">
+                <div class="col-lg-3" ng-repeat="image in issue.Images">
+                    <a href="#" class="thumbnail">
+                        <img ng-src="{{image}}" alt="">
+                    </a>
+                </div>
             </div>
+            
+            <div class="alert alert-info" ng-show="!issue.Images.length">
+                Just paste an images from the clip board to attach
+            </div>
+            
         </fieldset>
-        <button ng-click="save()">Create!</button>
+
+        <div class="btn-toolbar">
+            <button ng-click="save()" class="btn btn-primary">Create Issue</button>    
+        </div>        
     </form>
-
-    <h2>Reported issues</h2>
-    <table>
-        <caption>Reported issues</caption>
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Issue Type</th>
-            </tr>
-        </thead>
-        <tbody ng-repeat="issue in issues">
-            <tr>
-                <td>{{issue.Description}}</td>
-                <td>{{issue.IssueType}}</td>
-                <td ng-repeat="image in issue.Images">
-                    <img ng-src="{{image}}"/>
-                </td>
-            </tr>
-        </tbody>
-
-    </table>
 </div>
-
-
 
 <script src="/Scripts/angular.js"></script>
 <script src="/Scripts/angular-resource.js"></script>
+
+<style type="text/css">
+    .thumbnail img {
+        height: 200px;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
 
 <script>
     var cropsApp = angular.module('charterApplication', ["issueService"]);
 
     var api = angular.module("issueService", ["ngResource"]);
-    api.factory("Issue", function($resource) {
+    api.factory("Issue", function ($resource) {
         return $resource(
             "/api/issue/:Id",
             { Id: "@@Id" },
@@ -81,8 +89,18 @@
         );
     });
 
-    cropsApp.controller('issueController', function($scope, Issue) {
+    api.factory("IssueType", function ($resource) {
+        return $resource(
+            "/api/issuetype/:Id",
+            { Id: "@@Id" },
+            { "update": { method: "PUT" } }
+        );
+    });
+
+    cropsApp.controller('issueController', function ($scope, Issue, IssueType) {
         $scope.issues = Issue.query({ charterId: parseInt("1", 10) });
+        $scope.issueTypes = IssueType.query();
+
         $scope.issue = issueFactory();
 
         function issueFactory() {
@@ -93,13 +111,13 @@
 
         $scope.save = function () {
             $scope.issue.CharterId = $scope.CharterId;
-            
+
             console.log($scope.issue);
             $scope.issue.$save();
             $scope.issues.push($scope.issue);
         };
 
-        var imageLoaded = function(src) {
+        var imageLoaded = function (src) {
             $scope.issue.Images.push(src);
             $scope.$apply();
         };

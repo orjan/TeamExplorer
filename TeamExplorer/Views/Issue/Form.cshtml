@@ -24,9 +24,9 @@
     <fieldset>
         <legend>Create new issue</legend>
         <div class="field">
-            @Html.LabelFor(model => model.IssueType)
-            @Html.DropDownListFor(model => model.IssueType, new[] { new SelectListItem { Text = "Bug", Value = "Bug" }, new SelectListItem { Text = "Issue", Value = "Issue" }, new SelectListItem { Text = "Note", Value = "Note" } })
-            @Html.ValidationMessageFor(model => model.IssueType)
+            @Html.LabelFor(model => model.IssueTypeId)
+            @Html.DropDownListFor(model => model.IssueTypeId, new[] { new SelectListItem { Text = "Bug", Value = "1" }, new SelectListItem { Text = "Issue", Value = "2" }, new SelectListItem { Text = "Note", Value = "3" } })
+            @Html.ValidationMessageFor(model => model.IssueTypeId)
         </div>
         <div class="field">
             @Html.LabelFor(model => model.Description)
@@ -34,9 +34,9 @@
             @Html.ValidationMessageFor(model => model.Description)
         </div>
         <div class="field">
-            @Html.LabelFor(model => model.IssueDetails)
-            @Html.TextAreaFor(model => model.IssueDetails)
-            @Html.ValidationMessageFor(model => model.IssueDetails)
+            @Html.LabelFor(model => model.Details)
+            @Html.TextAreaFor(model => model.Details)
+            @Html.ValidationMessageFor(model => model.Details)
         </div>
     </fieldset>
     

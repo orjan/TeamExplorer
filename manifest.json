@@ -1,12 +1,13 @@
 {
   "name": "Team Explorer",
   "version": "0.2",
+  "manifest_version": 2,
   "app": {
     "urls": ["http://localhost/chrome/"],
     "launch": {
       "web_url": "http://localhost/chrome/",
 	  "container": "panel",
-	  "height": 400
+	  "height": 200
     }
   },
   "permissions": ["background", "notifications"]

@@ -16,22 +16,22 @@ namespace TeamExplorer.Models
 
         // TODO: should fix required fields
         //[Required]
-        public IssueType IssueType { get; set; }
+        public int IssueTypeId { get; set; }
         //[Required]
         public string Description { get; set; }
-        public string IssueDetails { get; set; }
+        public string Details { get; set; }
         public string Url { get; set; }
         public string Stacktrace { get; set; }
 
         /// <summary>
-        /// This contains the image src, the actual image should be stored somewhere else later on:
-        /// TODO: file or raven attachements
+        /// TODO: This contains the image src, the actual image should be stored somewhere else later like: file or raven attachements
         /// </summary>
         public ICollection<string> Images { get; set; }
     }
 
-    public enum IssueType
+    public class IssueType
     {
-        Bug, Issue, Note
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

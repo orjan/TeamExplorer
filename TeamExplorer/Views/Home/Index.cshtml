@@ -18,10 +18,14 @@
         <h2>Create charter</h2>
     </div>
     <div class="modal-body">
-    @Html.Action("Form", "Charter")
+        @Html.Action("Form", "Charter")
     </div>@*
     <div class="modal-footer">
         <a class="btn btn-primary" onclick="$(this).closest('form').submit()" >Save changes</a> <a href="#" data-dismiss="modal"
                                                                                                             class="btn">Close</a>
     </div>*@
+
 </div>
+<script>
+    chrome.windows.create({ url: 'http://localhost/Chrome/Explore/1', type: 'panel' });
+</script>
