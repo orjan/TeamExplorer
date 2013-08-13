@@ -57,7 +57,7 @@ namespace TeamExplorer
 
             DocumentStore = new EmbeddableDocumentStore()
                             {
-                                ConnectionStringName = "RavenDB"
+                                ConnectionStringName = "RavenDB"                            
                             };
             // DocumentStore.Conventions.IdentityPartsSeparator = "-";
             DocumentStore.Initialize();

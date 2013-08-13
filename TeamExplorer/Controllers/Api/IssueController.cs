@@ -14,12 +14,12 @@ namespace TeamExplorer.Controllers.Api
         {
             session = MvcApplication.DocumentStore.OpenSession();
         }
-
+        /*
         // GET api/issue
         public IEnumerable<Issue> Get()
         {
             return new Issue[]{ new Issue() {Description = "apa"}};
-        }
+        }*/
 
         // GET api/issue
         public IEnumerable<Issue> Get(int charterId)

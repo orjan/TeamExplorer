@@ -6,7 +6,7 @@ namespace TeamExplorer.Controllers
 {
     public class CharterController : DocumentController
     {
-        public ActionResult Index(string id)
+        public ActionResult Index(int id)
         {
             var charterViewModel = new CharterViewModel();
         

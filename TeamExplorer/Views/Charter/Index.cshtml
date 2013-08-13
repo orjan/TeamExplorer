@@ -1,13 +1,14 @@
 ﻿@model TeamExplorer.Controllers.CharterViewModel
+@{
+    ViewBag.Title = Model.Charter.Title;
+}
 
 <h2>Create a new issue</h2>
-<div ng-app="charterApplication" ng-controller="issueController" ng-init="CharterId=1337">
+<div ng-app="charterApplication" ng-controller="issueController" ng-init="CharterId=@Model.Charter.Id">
 
     <form>
         <fieldset>
             <legend>Create new issue</legend>
-            
-            <input type="hidden" ng-model="issue.CharterId" value="1337" />
 
             <div class="form-group">
                 <label for="issueType">Issue Type</label>
@@ -24,7 +25,7 @@
 
             <div class="form-group">
                 <label for="description">Details</label>
-                <textarea type="text" id="details" name="details" ng-model="issue.Details" class="form-control"></textarea>
+                <textarea id="details" name="details" ng-model="issue.Details" class="form-control"></textarea>
             </div>
         </fieldset>
 
@@ -34,7 +35,7 @@
 
         <fieldset>
             <legend>Screenshots: {{CharterId}}</legend>
-            <div class="screenshots" ng-repeat="image in images">
+            <div class="screenshots" ng-repeat="image in issue.Images">
                 <img ng-src="{{image}}" />
             </div>
         </fieldset>
@@ -53,6 +54,10 @@
         <tbody ng-repeat="issue in issues">
             <tr>
                 <td>{{issue.Description}}</td>
+                <td>{{issue.IssueType}}</td>
+                <td ng-repeat="image in issue.Images">
+                    <img ng-src="{{image}}"/>
+                </td>
             </tr>
         </tbody>
 
@@ -77,20 +82,25 @@
     });
 
     cropsApp.controller('issueController', function($scope, Issue) {
-        $scope.issues = Issue.query({ charterId: 1337 });
-        $scope.issue = new Issue();
-        $scope.images = [];
+        $scope.issues = Issue.query({ charterId: parseInt("1", 10) });
+        $scope.issue = issueFactory();
+
+        function issueFactory() {
+            var issue = new Issue();
+            issue.Images = [];
+            return issue;
+        }
 
         $scope.save = function () {
             $scope.issue.CharterId = $scope.CharterId;
             
             console.log($scope.issue);
             $scope.issue.$save();
+            $scope.issues.push($scope.issue);
         };
 
         var imageLoaded = function(src) {
-            console.log(src);
-            $scope.images.push(src);
+            $scope.issue.Images.push(src);
             $scope.$apply();
         };
 
@@ -108,7 +118,4 @@
         };
 
     });
-
-    // TeamExplorer.captureImages();
-    
 </script>
